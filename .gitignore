@@ -1,0 +1,30 @@
+# Script
+login.sh
+
+# Python / Django
+*.pyc
+__pycache__/
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.env
+*.env
+db.sqlite3
+media/
+staticfiles/
+
+# React / Vite
+node_modules/
+dist/
+.env.local
+.env.*.local
+
+# Editor
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
