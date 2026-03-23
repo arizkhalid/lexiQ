@@ -7,6 +7,9 @@ class Word(models.Model):
     definition = models.TextField()
     example = models.TextField()
 
+    def __str__(self) -> str:
+        return self.text
+
 STATUS = [
     ('weak', 'weak'),
     ('known', 'known')
@@ -19,4 +22,5 @@ class UserWord(models.Model):
     score = models.IntegerField()
 
 class Paragraph(models.Model):
+    title = models.CharField(max_length=20, default="")
     text = models.TextField()
