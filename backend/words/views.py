@@ -4,10 +4,18 @@ from .models import Word, UserWord, Paragraph
 from .serializers import WordSerializer, UserWordSerializer, ParagraphSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from django.contrib.auth.models import User
+from rest_framework.decorators import action
+
 
 user = User.objects.first()  # temporary
 class WordViewSet(viewsets.ModelViewSet):
     # permission_classes = [IsAuthenticated]
+    @action(detail=False, url_path='by-slug/(?P<slug>[^/.]+)')
+    def by_slug(self, request, slug=None):
+        queryset = self.get_queryset().filter(text=slug)
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
     queryset = Word.objects.all()
     serializer_class = WordSerializer
     lookup_field = 'text'

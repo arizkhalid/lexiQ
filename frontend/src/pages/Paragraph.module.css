@@ -45,10 +45,15 @@
   gap: 2rem;
 }
 .details {
-  height: 100px;
-  width: 100%;
   border: solid 1px black;
-
+  min-height: 350px;
+  width: 100%;
+}
+.details > div {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* label | value */
+  gap: 8px 16px;
+  align-items: start;
 }
 .content {
   font-size: xx-large;
