@@ -7,7 +7,6 @@ from django.contrib.auth.models import User
 from rest_framework.decorators import action
 
 
-user = User.objects.first()  # temporary
 class WordViewSet(viewsets.ModelViewSet):
     # permission_classes = [IsAuthenticated]
     @action(detail=False, url_path='by-slug/(?P<slug>[^/.]+)')
@@ -22,6 +21,7 @@ class WordViewSet(viewsets.ModelViewSet):
 
 class UserWordViewSet(viewsets.ModelViewSet):
     def create(self, request):
+        user = request.user
         word = Word.objects.get(text=request.data['word'])
         obj, created = UserWord.objects.update_or_create(
             user=user,
