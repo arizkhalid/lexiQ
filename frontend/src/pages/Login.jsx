@@ -1,6 +1,6 @@
 import { auth } from "../api/axios.js"
 import { useEffect, useState } from "react";
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import style from "./Login.module.css"
 
 export default function Login() {
@@ -12,8 +12,8 @@ export default function Login() {
     }
   }, [])
   const [form, setForm] = useState({
-    username: "user",
-    password: "1234",
+    username: "",
+    password: "",
   });
 
   function handleChange(e) {
@@ -41,9 +41,9 @@ export default function Login() {
   }
 
   return (
-    <div className="w-full h-125 flex justify-center items-center">
-      <form onSubmit={handleSubmit} className="flex flex-col m-auto gap-5">
-        <h2>Login</h2>
+    <div className="w-full h-screen flex justify-center items-center flex-col gap-5">
+      <form onSubmit={handleSubmit} className="flex flex-col m-auto gap-9 justify-center items-center">
+        <h2 className="text-3xl">Login</h2>
 
         <input
           type="text"
@@ -66,6 +66,7 @@ export default function Login() {
         <button type="submit">
           Login
         </button>
+        <Link to="/signup"><span className="text-gray-500 font-light">or SignUp Here!</span></Link>
       </form>
     </div>
   );

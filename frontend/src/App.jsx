@@ -6,6 +6,7 @@ import Paragraph from './pages/Paragraph'
 import Quiz from './pages/Quiz'
 import ProtectedRoute from './routes/ProtectedRoute'
 import Login from './pages/Login'
+import SignUp from './pages/Signup.jsx'
 
 function App() {
 
@@ -15,6 +16,7 @@ function App() {
       <Route path="/paragraph" element={<ProtectedRoute><Paragraph /></ProtectedRoute>} />
       <Route path="/quiz" element={<ProtectedRoute><Quiz /></ProtectedRoute>} />
       <Route path="/login" element={<Login />} />
+      <Route path="/signup" element={<SignUp />} />
     </Routes>
   )
 }

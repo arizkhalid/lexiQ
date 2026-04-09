@@ -6,7 +6,7 @@ function Navbar() {
     localStorage.clear("access");
     navigate("/login");
   }
-  return <nav className="flex h-[65px] items-center p-2 gap-5">
+  return <nav className="flex h-[65px] items-center py-2 px-8 gap-5">
     <Link to="/">
       <div className="w-10 h-10 bg-black flex items-center justify-center">
         <svg xmlns="http://www.w3.org/2000/svg"

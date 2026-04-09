@@ -25,7 +25,7 @@ export default function Home() {
           <Link to="/paragraph"><button className={style.button}>
             Read Paragraph
           </button></Link>
-          <Link to="/quiz">button className={style.button}><button className={style.button}>
+          <Link to="/quiz"><button className={style.button}>
             Take Quiz
           </button></Link>
         </div>

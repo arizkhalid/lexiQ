@@ -121,9 +121,7 @@ USE_I18N = True
 
 USE_TZ = True
 
-CORS_ALLOWED_ORIGINS = [
-    "https://lexi-q-sage.vercel.app",
-]
+CORS_ALLOWED_ORIGINS = os.getenv('CORS_ORIGINS', '').split(',');
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/

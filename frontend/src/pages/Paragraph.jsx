@@ -116,31 +116,42 @@ export default function Paragraph() {
           <div className={style.sidebarButton} key={p.id} onClick={() => { setCurrPara(p.word_list) }}>{p.title}</div>
         ))}
       </div>
-      <div className={style.contentWrapper}>
-        {currPara.length !== 0 ? <div className={style.details}>
-          <h3 className="font-bold text-2xl p-1">{details.text}</h3>
-          <div>
-            {FIELDS.map(({ label, key }) => {
-              const val = get(details, key);
-              console.log(val, key);
-              return (<span key={key}>
-                <span className="font-bold">{label}: </span>
-                <span>{val}</span>
-              </span>);
-            })}
-          </div>
-        </div> : <div className="text-2xl font-bold">Select a Paragraph and hover over any word to get its details</div>}
+      {currPara.length !== 0 && <div className={style.contentWrapper}>
         <div className={style.content}>
-          {currPara.map((w, i) => (
-            <span
-              className={hoveredWord === i ? style.hovered : ''}
-              onMouseEnter={() => { handleOnMouseEnter(w, i) }}
-              onMouseLeave={handleOnMouseLeave}
-            >{`${w} `}
-            </span>
-          ))}
-        </div>
-      </div>
+            {currPara.map((w, i) => (
+              <span
+                className={hoveredWord === i ? style.hovered : ''}
+                onMouseEnter={() => { handleOnMouseEnter(w, i) }}
+                onMouseLeave={handleOnMouseLeave}
+              >{`${w} `}
+              </span>
+            ))}
+          </div>
+      </div>}
+      {currPara.length !== 0 ? <div className={style.contentWrapper}>
+        <div className={style.details}>
+           <h3 className="font-bold text-2xl p-1">{details.text}</h3>
+           <div>
+             {FIELDS.map(({ label, key }) => {
+               const val = get(details, key);
+               console.log(val, key);
+               return (
+                 <>
+                   <span key={`${key}-label`} className={style.label}>{label}:</span>
+                   <span key={`${key}-value`} className={style.value}>{val || "-"}</span>
+                 </>
+               );
+             })}
+           </div>
+          </div>
+         </div> : <div className="text-3xl font-bold items-center justify-center flex h-[75%] w-full text-left">
+          <ul className="gap-5 flex flex-col">
+            <li>- Select any Paragraph</li>
+            <li>- Start Reading</li>
+            <li>- Hover over difficult words to learn about them</li>
+          </ul>
+        </div>}
+
     </div>
     <Footer /></>
 }

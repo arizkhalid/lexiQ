@@ -45,15 +45,36 @@
   gap: 2rem;
 }
 .details {
-  border: solid 1px black;
-  min-height: 350px;
+  border: solid 2px black;
+  height: fit-content;
   width: 100%;
+  padding: 12px;
 }
 .details > div {
   display: grid;
-  grid-template-columns: 1fr 1fr; /* label | value */
-  gap: 8px 16px;
+  grid-template-columns: max-content 1fr; /* label | value */
+  column-gap: 0;
+  row-gap: 0;
   align-items: start;
+}
+
+.label {
+  font-weight: 700;
+  white-space: nowrap;
+  padding: 8px 12px;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.value {
+  color: #111;
+  word-break: break-word;
+  padding: 8px 12px;
+  border-left: 1px solid #e5e5e5;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.details > div > span:nth-last-child(-n + 2) {
+  border-bottom: none;
 }
 .content {
   font-size: xx-large;
