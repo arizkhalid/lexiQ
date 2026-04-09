@@ -4,4 +4,7 @@
 body {
   margin: 0;
 }
-
+html.loading,
+html.loading * {
+  cursor: progress !important;
+}

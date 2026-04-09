@@ -13,11 +13,10 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    document.body.style.cursor = loading ? "progress" : "auto";
-    return () => {
-      document.body.style.cursor = "auto";
-    };
+    document.documentElement.classList.toggle("loading", loading);
+    return () => document.documentElement.classList.remove("loading");
   }, [loading]);
+
   useEffect(() => {
     const login = localStorage.getItem("access");
     if (login) {
@@ -46,8 +45,12 @@ export default function Login() {
       navigate("/");
     } catch (err) {
       console.error(err, err.response);
-      const message = err.response.data.detail || "Something went wrong, please try again."
-      setError(message);
+      if (err.response) {
+        const message = err.response.data.detail || "Something went wrong, please try again."
+        setError(message);
+      } else {
+        setError("Something went wrong, please try again.");
+      }
     } finally {
       setLoading(false);
     }

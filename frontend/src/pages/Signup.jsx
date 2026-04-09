@@ -13,10 +13,8 @@ export default function SignUp() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    document.body.style.cursor = loading ? "progress" : "auto";
-    return () => {
-      document.body.style.cursor = "auto";
-    };
+    document.documentElement.classList.toggle("loading", loading);
+    return () => document.documentElement.classList.remove("loading");
   }, [loading]);
   async function handleSubmit(e) {
     e.preventDefault();
