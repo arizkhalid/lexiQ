@@ -32,6 +32,8 @@ export default function SignUp() {
       if (err.response.status === 400) {
         console.log(err.response.data.username)
         setError(err.response.data.username[0]);
+      } else {
+        setError("Something went wrong, Please try again!");
       }
     } finally {
       setLoading(false);
