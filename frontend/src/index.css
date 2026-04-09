@@ -59,3 +59,7 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+html.loading,
+html.loading * {
+  cursor: progress !important;
+}
