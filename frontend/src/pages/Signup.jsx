@@ -10,8 +10,17 @@ export default function SignUp() {
   });
   const [registered, setRegistered] = useState(false);
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    document.body.style.cursor = loading ? "progress" : "auto";
+    return () => {
+      document.body.style.cursor = "auto";
+    };
+  }, [loading]);
   async function handleSubmit(e) {
     e.preventDefault();
+    setLoading(true);
     try {
       const res = await auth.post("register/", {username: form.username, password: form.password});
       console.log(res, res.data);
@@ -24,6 +33,8 @@ export default function SignUp() {
         console.log(err.response.data.username)
         setError(err.response.data.username[0]);
       }
+    } finally {
+      setLoading(false);
     }
      
   }

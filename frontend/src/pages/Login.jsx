@@ -4,18 +4,26 @@ import { useNavigate, Link } from 'react-router-dom'
 import style from "./Login.module.css"
 
 export default function Login() {
+  const [form, setForm] = useState({
+    username: "",
+    password: "",
+  });
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    document.body.style.cursor = loading ? "progress" : "auto";
+    return () => {
+      document.body.style.cursor = "auto";
+    };
+  }, [loading]);
   useEffect(() => {
     const login = localStorage.getItem("access");
     if (login) {
       navigate("/");
     }
   }, [])
-  const [form, setForm] = useState({
-    username: "",
-    password: "",
-  });
-
   function handleChange(e) {
     setForm({
       ...form,
@@ -25,6 +33,7 @@ export default function Login() {
 
   async function handleSubmit(e) {
     e.preventDefault();
+    setLoading(true);
 
     try {
       const res = await auth.post("token/", {
@@ -36,7 +45,11 @@ export default function Login() {
       localStorage.setItem("access", tokens.access);
       navigate("/");
     } catch (err) {
-      console.error(err);
+      console.error(err, err.response);
+      const message = err.response.data.detail || "Something went wrong, please try again."
+      setError(message);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -44,7 +57,7 @@ export default function Login() {
     <div className="w-full h-screen flex justify-center items-center flex-col gap-5">
       <form onSubmit={handleSubmit} className="flex flex-col m-auto gap-9 justify-center items-center">
         <h2 className="text-3xl">Login</h2>
-
+        {error && <span className="text-red-400 text-[0.75rem]">{error}</span>}
         <input
           type="text"
           name="username"
