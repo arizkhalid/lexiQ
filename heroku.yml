@@ -1,5 +1,0 @@
-build:
-  docker:
-    web: backend/Dockerfile
-run:
-  web: bash -c "cd /app && python manage.py migrate --noinput && gunicorn backend.wsgi:application --log-file - --bind 0.0.0.0:$PORT"
