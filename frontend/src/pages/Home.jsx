@@ -1,7 +1,6 @@
 import Navbar from "../components/Navbar"
 import { Link } from "react-router-dom"
 import style from "./Home.module.css"
-import Footer from "../components/Footer"
 function BookSVG() {
   return <svg xmlns="http://www.w3.org/2000/svg"
     width="24"

@@ -153,5 +153,5 @@ export default function Paragraph() {
         </div>}
 
     </div>
-    <Footer /></>
+    </>
 }
