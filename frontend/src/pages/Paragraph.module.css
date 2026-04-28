@@ -95,3 +95,9 @@
   font-size: 2rem;
   padding: 0 9rem;
 }
+
+.instruction {
+  border: solid 1px;  
+  padding: 1rem;
+  text-align: center;
+}

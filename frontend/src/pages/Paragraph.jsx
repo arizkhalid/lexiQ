@@ -1,5 +1,5 @@
 import Navbar from "../components/Navbar"
-import Footer from "../components/Footer.jsx"
+import arrowIcon from "../assets/arrow.svg"
 import { useState, useEffect, useRef } from 'react'
 import style from "./Paragraph.module.css"
 import { api } from "../api/axios.js"
@@ -105,7 +105,7 @@ export default function Paragraph() {
     return res;
   };
   return <> <Navbar />
-    <div className={style.page}>
+    <div className={`${style.page} font-sans`}>
       {showToast && (
         <div className="fixed bottom-4 right-4 bg-gray-800 text-white px-4 py-2 rounded shadow" role="status">
           Sorry — our servers are a bit slow right now. We're working on it.
@@ -144,12 +144,18 @@ export default function Paragraph() {
              })}
            </div>
           </div>
-         </div> : <div className="text-3xl font-bold items-center justify-center flex h-[75%] w-full text-left">
-          <ul className="gap-5 flex flex-col">
-            <li>- Select any Paragraph</li>
-            <li>- Start Reading</li>
-            <li>- Hover over difficult words to learn about them</li>
-          </ul>
+         </div> : <div className="h-[90%] w-full">
+          <div className="text-3xl items-center justify-center flex text-left font-sans h-full">
+            <ul className={`${style.instructions} gap-5 flex flex-col`}>
+              <li className={style.instruction}>Select a Paragraph</li>
+              <li className="flex justify-center rotate-180"><img src={arrowIcon} alt="icon" className="h-10 w-10"/></li>
+              <li className={style.instruction}>Read</li>
+              <li className="flex justify-center rotate-180"><img src={arrowIcon} alt="icon" className="h-10 w-10"/></li>
+              <li className={style.instruction}>Hover to learn about unfamiliar words</li>
+              <li className="flex justify-center rotate-180"><img src={arrowIcon} alt="icon" className="h-10 w-10"/></li>
+              <li className={style.instruction}>Click to add to weak words</li>
+            </ul>
+          </div>
         </div>}
 
     </div>
