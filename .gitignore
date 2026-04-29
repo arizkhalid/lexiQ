@@ -66,3 +66,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Data seeding (one-time scripts and JSON files for vocabulary population)
+data-seeding/
+backend/data-seeding/
