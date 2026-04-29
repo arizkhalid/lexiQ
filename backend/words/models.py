@@ -3,7 +3,10 @@ from django.contrib.auth.models import User
 
 
 # TODO what to do with same words with different meanings
-class Word(models.Model):
+class Lexeme(models.Model):
+    word = models.CharField(max_length=100, primary_key=True)
+
+class WordSense(models.Model):
     REGISTER_CHOICES = [
         ("formal", "Formal"),
         ("informal", "Informal"),
@@ -15,8 +18,7 @@ class Word(models.Model):
         ("negative", "Negative"),
         ("neutral", "Neutral"),
     ]
-
-    text = models.CharField(max_length=100)
+    lexeme = models.ForeignKey(Lexeme, on_delete=models.CASCADE)
     definition = models.TextField()
     example = models.TextField()
 
@@ -35,7 +37,7 @@ class Word(models.Model):
     word_forms = models.JSONField(default=dict, blank=True)
 
     def __str__(self) -> str:
-        return self.text
+        return self.lexeme.word
 
 
 STATUS = [("weak", "weak"), ("known", "known")]
@@ -43,17 +45,24 @@ STATUS = [("weak", "weak"), ("known", "known")]
 
 class UserWord(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    word = models.ForeignKey(Word, on_delete=models.CASCADE)
+    word = models.ForeignKey(Lexeme, on_delete=models.CASCADE)
     status = models.CharField(choices=STATUS, max_length=10)
-    # TODO add a score
-    score = models.IntegerField()
 
     def __str__(self) -> str:
         return self.word.text
 
 
 class Paragraph(models.Model):
+    DIFFICULTY_CHOICES = [
+        ("Easy", "Easy"),
+        ("Medium", "Medium"),
+        ("Hard", "Hard")
+    ]
     title = models.CharField(max_length=100, default="")
     text = models.TextField()
+    difficulty = models.CharField(
+        max_length=20, choices=DIFFICULTY_CHOICES
+    )
+    source = models.CharField(max_length=100, blank=True)
     def __str__(self) -> str:
         return self.title

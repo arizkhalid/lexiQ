@@ -1,14 +1,17 @@
 from rest_framework import fields, serializers
-from .models import Word, UserWord, Paragraph
+from .models import WordSense, Lexeme, UserWord, Paragraph
 
-
-class WordSerializer(serializers.ModelSerializer):
+class LexemeSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Word
-        # include the examples JSONField and avoid duplicate 'example' entry
+        model = Lexeme
+        fields = ["word"]
+
+class WordSenseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = WordSense
         fields = [
             "id",
-            "text",
+            "lexeme",
             "definition",
             "example",
             "part_of_speech",

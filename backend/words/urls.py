@@ -1,11 +1,12 @@
 from rest_framework.routers import DefaultRouter
-from .views import WordViewSet, ParagraphViewSet, UserWordViewSet
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from .views import ParagraphViewSet, UserWordViewSet, WordAPIView
 from django.urls import path, include
 
 router = DefaultRouter()
-router.register(r'words', WordViewSet)
 router.register(r'paragraph', ParagraphViewSet)
 router.register(r'user-words', UserWordViewSet)
 
-urlpatterns = router.urls
+urlpatterns = [
+    path("words/<str:word>/", WordAPIView.as_view()),
+    path("", include(router.urls))
+]

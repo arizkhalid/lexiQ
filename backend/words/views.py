@@ -1,32 +1,28 @@
 from rest_framework import viewsets
 from rest_framework.response import Response
-from .models import Word, UserWord, Paragraph
-from .serializers import WordSerializer, UserWordSerializer, ParagraphSerializer
+from rest_framework.views import APIView
+from .models import WordSense, Lexeme, UserWord, Paragraph
+from .serializers import WordSenseSerializer, UserWordSerializer, ParagraphSerializer, LexemeSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from django.contrib.auth.models import User
-from rest_framework.decorators import action
+from django.shortcuts import get_object_or_404
 
-
-class WordViewSet(viewsets.ModelViewSet):
-    # permission_classes = [IsAuthenticated]
-    @action(detail=False, url_path='by-slug/(?P<slug>[^/.]+)')
-    def by_slug(self, request, slug=None):
-        queryset = self.get_queryset().filter(text=slug)
-        serializer = self.get_serializer(queryset, many=True)
-        return Response(serializer.data)
-
-    queryset = Word.objects.all()
-    serializer_class = WordSerializer
-    lookup_field = 'text'
+class WordAPIView(APIView):
+    def get(self, request, word):
+        lexeme = get_object_or_404(Lexeme, word=word.lower())
+        senses = WordSense.objects.filter(lexeme=lexeme)
+        data = WordSenseSerializer(senses, many=True).data
+        return Response(data) 
+        
 
 class UserWordViewSet(viewsets.ModelViewSet):
     def create(self, request):
         user = request.user
-        word = Word.objects.get(text=request.data['word'])
+        word = Lexeme.objects.get(word=request.data['word'])
         obj, created = UserWord.objects.update_or_create(
             user=user,
             word=word,
-            defaults={'status': request.data['status'], 'score': 10}
+            defaults={'status': request.data['status']}
         )
         serializer = UserWordSerializer(obj)
         return Response(serializer.data)
