@@ -40,4 +40,4 @@ class ParagraphSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Paragraph
-        fields = ["title", "text", "word_list"]
+        fields = ["id", "title", "text", "word_list", "difficulty", "source"]

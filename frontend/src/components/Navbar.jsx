@@ -23,7 +23,7 @@ function Navbar() {
           <Link to="/">Home</Link>
         </li>
         <li>
-          <Link to="/paragraph">Paragraph</Link>
+          <Link to="/paragraph">Paragraphs</Link>
         </li>
         {/* <li> */}
         {/*   <Link to="/quiz">Quiz</Link> */}
