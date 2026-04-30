@@ -1,3 +1,4 @@
+from re import L
 from rest_framework import fields, serializers
 from .models import WordSense, Lexeme, UserWord, Paragraph
 
@@ -7,6 +8,21 @@ class LexemeSerializer(serializers.ModelSerializer):
         fields = ["word"]
 
 class WordSenseSerializer(serializers.ModelSerializer):
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        word = instance.lexeme.word.lower()
+
+        text_fields = ['definition', 'example', 'examples', 'usage', 'collocations']
+
+        for field in text_fields:
+            if field in data and data[field]:
+                if isinstance(data[field], list):
+                    data[field] = [str(item).replace('{word}', word) for item in data[field]]
+                else:
+                    data[field] = str(data[field]).replace('{word}', word)
+        return data
+        
+        
     class Meta:
         model = WordSense
         fields = [
