@@ -36,6 +36,8 @@ class MCQ(BaseModel):
     wrong_option_3: str = Field(description="Third out of three wrong options for the MCQ")
 class MCQSet(BaseModel):
     mcqs: List[MCQ]
+class WordMCQSet(BaseModel):
+    words_mcqs: dict[str, MCQSet] = Field(description="Word and its Set")
 
 GEMINI_KEY = os.getenv("GEMINI_API_KEY")
 client = genai.Client(api_key=GEMINI_KEY)
@@ -63,11 +65,8 @@ def get_word_details(word_details, context):
     word_details = word_details.model_dump()
     return word_details
 
-def generate_mcq(word, context: str = ""):
-    context_str = ""
-    if context:
-        context_str = " and the context of its usage"
-    prompt = f"""You are given a word{context_str}. Generate exactly 4 fill-in-the-blank MCQs that test whether the user truly knows what the word means and how it is used.
+def generate_mcq(words, contexts: list = []):
+    prompt = f"""You are given a list of words. Generate exactly 4 fill-in-the-blank MCQs for each word that test whether the user truly knows what the word means and how it is used.
 
             Each question is a sentence with a blank (_______) where the target word fits. Each question has 4 options: one correct, three wrong.
 
@@ -75,18 +74,37 @@ def generate_mcq(word, context: str = ""):
             - The blank must fit the target word naturally and precisely.
             - The wrong options must be genuinely difficult to eliminate. A user who does not know the word's meaning should not be able to guess the answer.
 
-            Word: {word}"""
+            Words: {words}"""
+    if contexts:
+        prompt += f"\nContext {contexts}"
 
     response = client.models.generate_content(
-        model="gemma-4-31b-it",
+        model="gemini-3-flash-preview",
         contents=prompt,
         config={
             "response_mime_type": "application/json",
-            "response_json_schema": MCQSet.model_json_schema(),
+            "response_json_schema": WordMCQSet.model_json_schema(),
         },
     )
     if not response or not response.text:
         return
-    mcq_set = MCQSet.model_validate_json(response.text)
+    mcq_set = WordMCQSet.model_validate_json(response.text)
     mcq_set = mcq_set.model_dump()
     return mcq_set
+
+words = ["younger", "vulnerable", "years", "father", "advice", "turning", "mind", "criticizing", "remember", "people", "world", "advantages", "communicative", "reserved", "understood", "consequence", "inclined", "reserve", "judgements", "habit", "opened", "curious", "natures", "victim", "veteran", "bores", "abnormal", "quick", "detect", "attach", "quality", "appears", "normal", "person", "college", "unjustly", "accused", "politician", "privy", "secret", "griefs", "wild", "unknown", "men", "confidences", "unsought", "frequently", "feigned", "sleep", "preoccupation", "hostile", "levity", "realized", "unmistakable", "sign", "intimate", "revelation", "quivering", "horizon", "revelations", "young", "terms", "express", "plagiaristic", "marred", "obvious", "suppressions", "reserving", "infinite", "hope", "afraid", "missing", "forget", "snobbishly", "suggested", "repeat", "sense", "fundamental", "decencies", "parcelled", "unequally", "birth", "boasting", "tolerance", "admission", "limit", "conduct", "founded", "hard", "rock", "wet", "marshes", "point", "care", "East", "autumn", "uniform", "moral", "attention", "forever", "riotous", "excursions", "privileged", "glimpses", "human", "heart", "Gatsby", "man", "name", "book", "exempt", "reaction", "represented", "unaffected", "scorn", "personality", "unbroken", "series", "successful", "gestures", "gorgeous", "heightened", "sensitivity", "promises", "life", "related", "intricate", "machines", "register", "earthquakes", "thousand", "miles", "responsiveness", "flabby", "impressionability", "dignified", "creative", "temperament", "extraordinary", "gift", "romantic", "readiness", "likely", "preyed", "foul", "dust", "floated", "wake", "dreams", "temporarily", "closed", "interest", "abortive", "sorrows", "short-winded", "elations"]
+
+part1 = words[0:30]
+part2 = words[30:60]
+part3 = words[60:90]
+part4 = words[90:120]
+part5 = words[120:]
+
+import json
+
+parts = [part1, part2, part3, part4, part5]
+
+for i, part in enumerate(parts, start=1):
+    result = generate_mcq(part)
+    with open(f"mcq_json{i}.json", "w", encoding="utf-8") as f:
+        json.dump(result, f, indent=2)
