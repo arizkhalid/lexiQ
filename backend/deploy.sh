@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e
 
+cd backend
+
 echo "Running migrations..."
 python manage.py migrate --noinput
 echo "✓ Migrations done"
