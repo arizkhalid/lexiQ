@@ -49,7 +49,7 @@ class UserWord(models.Model):
     status = models.CharField(choices=STATUS, max_length=10)
 
     def __str__(self) -> str:
-        return self.word.text
+        return self.word.word
 
 
 class Paragraph(models.Model):

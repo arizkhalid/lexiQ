@@ -25,9 +25,9 @@ function Navbar() {
         <li>
           <Link to="/paragraph">Paragraphs</Link>
         </li>
-        {/* <li> */}
-        {/*   <Link to="/quiz">Quiz</Link> */}
-        {/* </li> */}
+        <li>
+          <Link to="/quiz">Quiz</Link>
+        </li>
       </ul>
     </div>
     <span onClick={handleLogout} className="cursor-pointer ml-auto">Log Out</span>

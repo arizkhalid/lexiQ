@@ -25,7 +25,7 @@ api.interceptors.response.use((res) => res, async (error) => {
       const access = refreshRes.data.access;
       localStorage.setItem('access', access);
       original.headers.Authorization = `Bearer ${access}`
-      return api(original);
+      return api(old);
     } catch {
       localStorage.removeItem("access");
       window.location.href = "/login?reason=expired";

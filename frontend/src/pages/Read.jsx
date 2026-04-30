@@ -2,7 +2,6 @@ import { useEffect, useState, useRef } from "react";
 import { api } from "../api/axios.js"
 import { useSearchParams } from "react-router-dom";
 import style from "./Read.module.css"
-import Navbar from "../components/Navbar.jsx";
 
 export default function Read() {
   const FIELDS = [
@@ -55,8 +54,8 @@ export default function Read() {
   });
   const [selSense, setSelSense] = useState(0)
   const [senses, setSenses] = useState([])
+  const [showToast, setShowToast] = useState(false)
   const hoverTimeout = useRef(null)
-  const hoveredTimeout2 = useRef(null)
 
   const get = (obj, path) => {
     const res = path.split('.').reduce((o, k) => o?.[k], obj);
@@ -83,15 +82,20 @@ export default function Read() {
         setSelSense(0);
       })
     }, 500);
-    hoveredTimeout2.current = setTimeout(() => {
-      api.post("/user-words/", { word, status: "weak" })
-    }, 1000)
   }
 
   const handleOnMouseLeave = () => {
     clearTimeout(hoverTimeout.current);
-    clearTimeout(hoveredTimeout2.current);
     setHoveredWord(null);
+  }
+
+  const handleClick = (w) => {
+    const word = w.replace(/[^a-zA-Z]/g, '').toLowerCase()
+    api.post("/user-words/", { word, status: "weak" })
+    setShowToast(true);
+    setTimeout(() => {
+      setShowToast(false);
+    }, 1000)
   }
 
   useEffect(() => {
@@ -108,6 +112,7 @@ export default function Read() {
   }, [selSense, senses])
 
   return <div className={style.page}> 
+    <span className={`${style.weakToast} ${!showToast && "hidden"}`}>Added to Weak Words!</span>
     <div className={style.contentWrapper}>
         <div className={style.content}>
           {currPara && currPara.map((w, i) => (
@@ -115,6 +120,7 @@ export default function Read() {
               className={`${hoveredWord === i ? style.hovered : ''} ${w === " " ? style.space : ""} ${w === "\n" ? style.newLine : ""}`}
               onMouseEnter={() => { handleOnMouseEnter(w, i) }}
               onMouseLeave={handleOnMouseLeave}
+              onClick={() => { handleClick(w) }}
             >{`${w}`}
             </span>
           ))}

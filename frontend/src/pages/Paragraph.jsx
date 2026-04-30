@@ -1,4 +1,3 @@
-import Navbar from "../components/Navbar"
 import arrowIcon from "../assets/arrow.svg"
 import { useState, useEffect, useRef } from 'react'
 import style from "./Paragraph.module.css"
