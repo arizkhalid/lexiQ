@@ -38,9 +38,9 @@ function Navbar() {
       <span onClick={handleLogout} className="cursor-pointer ml-8">Log Out</span>
     </div>
     {instructions && <div>
-      <div className="h-[85%] w-[75%] absolute left-[15%] top-[10%] bg-white border-2 border-black">
+      <div className="h-[85%] w-[90%] md:w-[75%] absolute left-[5%] md:left-[15%] top-[10%] bg-white border-2 border-black">
               <span className="absolute right-3 top-2 bg-black text-white cursor-pointer rounded font-bold h-6 w-6" onClick={() => {setInstructions(false)}}>x</span>
-              <div className="text-3xl items-center justify-center flex text-left font-sans h-full">
+              <div className="text-lg md:text-3xl items-center justify-center flex text-left font-sans h-full">
                 <ul className={`${style.instructions} gap-5 flex flex-col`}>
                   <li className={style.instruction}>Select a Paragraph</li>
                   <li className="flex justify-center rotate-180"><img src={arrowIcon} alt="icon" className="h-10 w-10" /></li>
