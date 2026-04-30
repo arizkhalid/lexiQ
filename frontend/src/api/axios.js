@@ -1,37 +1,60 @@
-// src/api/axios.js
-import axios from 'axios'
 const API_URL = import.meta.env.VITE_API_URL
-const api = axios.create({
-  baseURL: `${API_URL}/api`,
-})
-const auth = axios.create({
-  baseURL:  `${API_URL}/api/auth`,
-  withCredentials: true,
-});
-api.interceptors.request.use((config) => {
-  const token = localStorage.getItem('access')
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`
-  }
-  return config
-});
-api.interceptors.response.use((res) => res, async (error) => {
-  const old = error.config;
-
-  if (error.response?.status === 401 && !old._retry) {
-    old._retry = true;
+async function refreshToken() {
+  const res = await fetch(`${API_URL}/api/auth/token/refresh/`, {
+    method: 'POST',
+    credentials: 'include',
+  });
+  if (!res.ok) throw new Error('Refresh failed');
+  const data = await res.json();
+  localStorage.setItem('access', data.access);
+  return data.access;
+}
+async function request(url, options = {}. retry = true) {
+  const token = localStorage.getItem('access');
+  const res = await fetch(`${API_URL}/api${url}`, {
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+        ...(token && { Authorization: `Bearer ${token}` }),
+        ...options.headers,
+    },
+  });
+  
+  if (res.status === 401 && retry) {
     try {
-      const refreshRes = await auth.post("token/refresh/");
-      const access = refreshRes.data.access;
-      localStorage.setItem('access', access);
-      original.headers.Authorization = `Bearer ${access}`
-      return api(old);
+      const newToken = await refreshToken();
+      return request(url, {
+        ...options,
+        headers: {
+          ...options.headers,
+            Authorization: `Bearer ${newToken}`,
+      },}, false);
     } catch {
-      localStorage.removeItem("access");
-      window.location.href = "/login?reason=expired";
+      localStorage.removeItem('access');
+      window.location.href = '/login?reason=expired';
+      return;
     }
   }
-  return Promise.reject(error);
-})
+  if (!res.ok) return Promise.reject(await res.json());
+  return res.json();
+}
 
-export {api, auth}
+const api = {
+  get: (url, options) => request(url, { method: 'GET', ...options }),
+  post: (url, data, options) => request(url, { method: 'POST', body: JSON.stringify(data), ...options }),
+  put: (url, data, options) => request(url, { method: 'PUT', body: JSON.stringify(data), ...options }),
+  patch: (url, data, options) => request(url, { method: 'PATCH', body: JSON.stringify(data), ...options }),
+  delete: (url, options) => request(url, { method: 'DELETE', ...options }),
+};
+
+const auth = {
+  post: (url, data) => fetch(`${API_URL}/api/auth${url}`, {
+    method: 'POST',
+    credentials: 'include',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  }).then(res => res.json()),
+};
+
+export { api, auth };
+

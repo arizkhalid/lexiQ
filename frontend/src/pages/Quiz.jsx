@@ -14,7 +14,7 @@ export default function Quiz() {
   const handleGenrate = () => {
     setEnded(null);
     setLoading(true);
-    api.post('quiz/generate/').then((res) => {
+    api.post('/quiz/generate/').then((res) => {
       localStorage.setItem('quiz_id', res.data.quiz_id);
       setQuestion(res.data.question)
       setLoading(false);
@@ -27,7 +27,7 @@ export default function Quiz() {
       return
     }
     setLoading(true);
-    api.post('quiz/mcq_solved/', {
+    api.post('/quiz/mcq_solved/', {
       quiz_id: localStorage.getItem("quiz_id"),
       mcq_id: question.id,
       selected: selected
@@ -54,9 +54,6 @@ export default function Quiz() {
       document.documentElement.classList.toggle("loading", loading);
       return () => document.documentElement.classList.remove("loading");
     }, [loading]);
-  }
-  const handleSelect = (txt) => {
-    setSelected(txt);
   }
   return <>
     <div className={style.page}>
