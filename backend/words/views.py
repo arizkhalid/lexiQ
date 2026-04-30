@@ -8,6 +8,7 @@ from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 
 class WordAPIView(APIView):
+    permission_classes = [IsAuthenticated]
     def get(self, request, word):
         lexeme = get_object_or_404(Lexeme, word=word.lower())
         senses = WordSense.objects.filter(lexeme=lexeme)
@@ -26,11 +27,11 @@ class UserWordViewSet(viewsets.ModelViewSet):
         )
         serializer = UserWordSerializer(obj)
         return Response(serializer.data)
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
     queryset = UserWord.objects.all()
     serializer_class = UserWordSerializer
 
 class ParagraphViewSet(viewsets.ModelViewSet):
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
     queryset = Paragraph.objects.all()
     serializer_class = ParagraphSerializer

@@ -36,6 +36,7 @@ class GenerateQuizView(APIView):
         return Response({'quiz_id': quiz.id, 'question': res.data}, status=status.HTTP_201_CREATED)
 
 class McqSolvedView(APIView):
+    permission_classes = [IsAuthenticated]
     def post(self, request):
         quiz_id = int(request.data.get('quiz_id'))
         mcq_id = int(request.data.get('mcq_id'))

@@ -12,8 +12,6 @@ class LoginView(TokenObtainPairView):
     def post(self, request, *args, **kwargs):
         response = super().post(request, *args, **kwargs)
         refresh = response.data.pop("refresh")
-        # For cross-site cookies in production, use SameSite=None and Secure=True
-        # For development, use SameSite=Lax and Secure=False
         is_secure = not settings.DEBUG
         samesite = "None" if is_secure else "Lax"
         response.set_cookie(
