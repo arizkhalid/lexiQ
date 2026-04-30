@@ -9,7 +9,7 @@ async function refreshToken() {
   localStorage.setItem('access', data.access);
   return data.access;
 }
-async function request(url, options = {}. retry = true) {
+async function request(url, options = {}, retry = true) {
   const token = localStorage.getItem('access');
   const res = await fetch(`${API_URL}/api${url}`, {
     ...options,
@@ -36,7 +36,7 @@ async function request(url, options = {}. retry = true) {
     }
   }
   if (!res.ok) return Promise.reject(await res.json());
-  return res.json();
+  return { data: await res.json() };
 }
 
 const api = {
@@ -53,7 +53,7 @@ const auth = {
     credentials: 'include',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data),
-  }).then(res => res.json()),
+  }).then(async res => ({ data: await res.json() })),
 };
 
 export { api, auth };

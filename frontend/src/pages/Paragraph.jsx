@@ -31,7 +31,7 @@ export default function Paragraph() {
       )}
       <h1>Select a Paragraph!</h1>
       <div className={style.cardContainer}>
-        {paragraphs.map((p) => (
+        {paragraphs && paragraphs.map((p) => (
           <div className={style.paraCard} key={p.id} onClick={() => { navigate(`read/?para_id=${p.id}`) }}>
             <div className="text-xl border-b-2">{p.title}</div>
             <div className="text-sm pt-4">
