@@ -1,7 +1,6 @@
 import { auth } from "../api/axios.js"
 import { useEffect, useState } from "react";
 import { useNavigate, Link } from 'react-router-dom'
-import style from "./Login.module.css"
 
 export default function Login() {
   const [form, setForm] = useState({
@@ -35,7 +34,7 @@ export default function Login() {
     setLoading(true);
 
     try {
-      const res = await auth.post("token/", {
+      const res = await auth.post("/token/", {
         username: form.username,
         password: form.password,
       });

@@ -48,12 +48,21 @@ const api = {
 };
 
 const auth = {
-  post: (url, data) => fetch(`${API_URL}/api/auth${url}`, {
-    method: 'POST',
-    credentials: 'include',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data),
-  }).then(async res => ({ data: await res.json() })),
+  post: async (url, data) => {
+    const res = await fetch(`${API_URL}/api/auth${url}`, {
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+    const json = await res.json();
+    if (!res.ok) {
+      const err = new Error('Auth error');
+      err.response = { status: res.status, data: json };
+      throw err;
+    }
+    return { data: json, status: res.status };
+  },
 };
 
 export { api, auth };
