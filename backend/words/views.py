@@ -2,13 +2,15 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from .models import WordSense, Lexeme, UserWord, Paragraph
-from .serializers import WordSenseSerializer, UserWordSerializer, ParagraphSerializer, LexemeSerializer
-from rest_framework.permissions import IsAuthenticated, AllowAny
-from django.contrib.auth.models import User
+from .serializers import WordSenseSerializer, UserWordSerializer, ParagraphSerializer
+from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
+from django.views.decorators.cache import cache_page
+from django.utils.decorators import method_decorator
 
 class WordAPIView(APIView):
     permission_classes = [IsAuthenticated]
+    @method_decorator(cache_page(3600))
     def get(self, request, word):
         lexeme = get_object_or_404(Lexeme, word=word.lower())
         senses = WordSense.objects.filter(lexeme=lexeme)
@@ -35,3 +37,11 @@ class ParagraphViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     queryset = Paragraph.objects.all()
     serializer_class = ParagraphSerializer
+
+    @method_decorator(cache_page(3600))
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
+
+    @method_decorator(cache_page(3600))
+    def retrieve(self, request, *args, **kwargs):
+        return super().retrieve(request, *args, **kwargs)

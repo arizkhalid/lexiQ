@@ -1,7 +1,6 @@
 import { auth } from "../api/axios.js"
 import { useEffect, useState } from "react";
 import { useNavigate, Link } from 'react-router-dom'
-import style from "./Signup.module.css"
 
 export default function SignUp() {
   const [form, setForm] = useState({
@@ -20,7 +19,7 @@ export default function SignUp() {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await auth.post("register/", {username: form.username, password: form.password});
+      const res = await auth.post("/register/", {username: form.username, password: form.password});
       console.log(res, res.data);
       if (res.status === 201) {
         setRegistered(true);
