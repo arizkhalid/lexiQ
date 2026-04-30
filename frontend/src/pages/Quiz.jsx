@@ -1,5 +1,5 @@
 import style from "./Quiz.module.css"
-import { useState, useRef } from "react"
+import { useEffect, useState, useRef } from "react"
 import { api } from "../api/axios.js"
 
 export default function Quiz() {
@@ -9,11 +9,15 @@ export default function Quiz() {
   const [ended, setEnded] = useState(null)
   const [correct, setCorrect] = useState(null)
   const [correctOption, setCorrectOption] = useState('')
+  const [loading, setLoading] = useState(false);
+
   const handleGenrate = () => {
     setEnded(null);
+    setLoading(true);
     api.post('quiz/generate/').then((res) => {
       localStorage.setItem('quiz_id', res.data.quiz_id);
       setQuestion(res.data.question)
+      setLoading(false);
     })
   }
   const handleSolveSubmit = () => {
@@ -22,11 +26,13 @@ export default function Quiz() {
       setCorrect(null);
       return
     }
+    setLoading(true);
     api.post('quiz/mcq_solved/', {
       quiz_id: localStorage.getItem("quiz_id"),
       mcq_id: question.id,
       selected: selected
     }).then(res => {
+      setLoading(false);
       if (res.data?.ended) {
           setCorrect(res.data.correct)
           setCorrectOption(res.data.correct_option)
@@ -43,6 +49,11 @@ export default function Quiz() {
       setCorrectOption(res.data.correct_option)
       questionRef.current = res.data.next;
     });
+    
+    useEffect(() => {
+      document.documentElement.classList.toggle("loading", loading);
+      return () => document.documentElement.classList.remove("loading");
+    }, [loading]);
   }
   const handleSelect = (txt) => {
     setSelected(txt);
