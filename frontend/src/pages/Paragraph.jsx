@@ -24,7 +24,7 @@ export default function Paragraph() {
     })
   }, [])
 
-  return <> <Navbar />
+  return <>
     <div className={`${style.page} font-sans`}>
       {showToast && (
         <div className="fixed bottom-4 right-4 bg-gray-800 text-white px-4 py-2 rounded shadow" role="status">
@@ -39,7 +39,7 @@ export default function Paragraph() {
             <div className="text-sm pt-4">
               <div><strong>Difficulty:</strong><br />{p.difficulty}<br />•</div>
               <div><strong>Source:</strong><br />{p.source}<br />•</div>
-              <div><strong>Words:</strong><br />{p.word_list.length}</div>
+              <div><strong>Words:</strong><br />{p.word_length}</div>
             </div>
           </div>
         ))}

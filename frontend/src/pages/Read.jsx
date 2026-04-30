@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import { api } from "../api/axios.js"
 import { useSearchParams } from "react-router-dom";
 import style from "./Read.module.css"
+import Navbar from "../components/Navbar.jsx";
 
 export default function Read() {
   const FIELDS = [
@@ -52,6 +53,8 @@ export default function Read() {
     etymology: "",
     notes: "",
   });
+  const [selSense, setSelSense] = useState(0)
+  const [senses, setSenses] = useState([])
   const hoverTimeout = useRef(null)
   const hoveredTimeout2 = useRef(null)
 
@@ -64,17 +67,20 @@ export default function Read() {
   };
 
   const handleOnMouseEnter = (w, i) => {
+    if ( ! /^\p{L}+$/u.test(w)) {
+      return
+    }
     const word = w.replace(/[^a-zA-Z]/g, '').toLowerCase()
     hoverTimeout.current = setTimeout(() => {
       setHoveredWord(i);
-      api.get(`/words/by-slug/${word}/`).then((res) => {
+      api.get(`/words/${word}/`).then((res) => {
         console.log(res.data);
         if (Array.isArray(res.data)) {
-          setDetails(res.data[0])
+          setSenses(res.data)
         } else {
-          setDetails(res.data);
-
+          setSenses([res.data])
         }
+        setSelSense(0);
       })
     }, 500);
     hoveredTimeout2.current = setTimeout(() => {
@@ -94,27 +100,36 @@ export default function Read() {
       console.log(res.data);
     })
   }, [])
+  useEffect(() => {
+    if (!senses) {
+      return
+    }
+    setDetails(senses[selSense]);
+  }, [selSense, senses])
 
-  return <div> 
+  return <div className={style.page}> 
     <div className={style.contentWrapper}>
         <div className={style.content}>
           {currPara && currPara.map((w, i) => (
             <span
-              className={hoveredWord === i ? style.hovered : ''}
+              className={`${hoveredWord === i ? style.hovered : ''} ${w === " " ? style.space : ""} ${w === "\n" ? style.newLine : ""}`}
               onMouseEnter={() => { handleOnMouseEnter(w, i) }}
               onMouseLeave={handleOnMouseLeave}
-            >{`${w} `}
+            >{`${w}`}
             </span>
           ))}
         </div>
       </div>
       {currPara && currPara.length !== 0 ? <div className={style.contentWrapper}>
         <div className={style.details}>
-          <h3 className="font-bold text-2xl p-1">{details.text}</h3>
+          <div className={style.headings}>
+          {senses.map((x, i) => {
+            console.log(x, i);
+            return <h3 className={`font-bold text-2xl p-1 ${selSense === i ? style.selected : ""}`} onClick={() => {setSelSense(i)}}>{x.lexeme}</h3>;
+          })}</div>
           <div>
             {FIELDS.map(({ label, key }) => {
               const val = get(details, key);
-              console.log(val, key);
               return (
                 <>
                   <span key={`${key}-label`} className={style.label}>{label}:</span>

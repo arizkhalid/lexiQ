@@ -1,9 +1,9 @@
 .page {
-  height: 100vh;
+  height: 100dvh;
   width: 100vw;
   display: flex;
   flex-direction: column;
-  padding: 50px 300px;
+  padding: 65px 300px;
 }
 
 .sidebar {

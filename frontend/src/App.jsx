@@ -7,10 +7,12 @@ import ProtectedRoute from './routes/ProtectedRoute'
 import Login from './pages/Login'
 import SignUp from './pages/Signup.jsx'
 import Read from './pages/Read.jsx'
+import Navbar from './components/Navbar.jsx'
 
 function App() {
 
-  return (
+  return (<>
+    <Navbar />
     <Routes>
       <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
       <Route path="/paragraph" element={<ProtectedRoute><Paragraph /></ProtectedRoute>} />
@@ -19,6 +21,7 @@ function App() {
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<SignUp />} />
     </Routes>
+</>
   )
 }
 

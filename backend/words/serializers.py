@@ -34,10 +34,22 @@ class UserWordSerializer(serializers.ModelSerializer):
 
 class ParagraphSerializer(serializers.ModelSerializer):
     word_list = serializers.SerializerMethodField()
+    word_length = serializers.SerializerMethodField()
 
     def get_word_list(self, obj):
-        return obj.text.split()
+        res = []
+        text = obj.text
+        start = 0
+        for i in range(len(text)):
+            if not text[i].isalpha():
+                res.append(text[start:i])
+                res.append(text[i])
+                start = i+1
+        return res
+
+    def get_word_length(self, obj):
+        return len(obj.text.split())
 
     class Meta:
         model = Paragraph
-        fields = ["id", "title", "text", "word_list", "difficulty", "source"]
+        fields = ["id", "title", "text", "word_list", "difficulty", "source", "word_length"]

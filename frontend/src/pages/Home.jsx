@@ -14,7 +14,6 @@ function BookSVG() {
 }
 export default function Home() {
   return <>
-    <Navbar />
     <section className="flex flex-col gap-8 font-sans">
       <div className="max-w-[800px] mx-auto mt-[100px]">
         <h1>
