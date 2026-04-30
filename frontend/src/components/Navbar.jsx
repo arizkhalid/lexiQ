@@ -1,6 +1,9 @@
-import style from "./Navbar.module.css"
 import { Link, useNavigate } from "react-router-dom"
+import arrowIcon from "../assets/arrow.svg"
+import style from "./Navbar.module.css"
+import { useState } from "react";
 function Navbar() {
+  const [instructions, setInstructions] = useState(false)
   const navigate = useNavigate();
   const handleLogout = () => {
     localStorage.clear("access");
@@ -30,7 +33,28 @@ function Navbar() {
         </li>
       </ul>
     </div>
-    <span onClick={handleLogout} className="cursor-pointer ml-auto">Log Out</span>
+    <div className="ml-auto">
+      <span onClick={() => {setInstructions(true)}} className="cursor-pointer">Instructions</span>
+      <span onClick={handleLogout} className="cursor-pointer ml-8">Log Out</span>
+    </div>
+    {instructions && <div>
+      <div className="h-[85%] w-[75%] absolute left-[15%] top-[10%] bg-white border-2 border-black">
+              <span className="absolute right-3 top-2 bg-black text-white cursor-pointer rounded font-bold h-6 w-6" onClick={() => {setInstructions(false)}}>x</span>
+              <div className="text-3xl items-center justify-center flex text-left font-sans h-full">
+                <ul className={`${style.instructions} gap-5 flex flex-col`}>
+                  <li className={style.instruction}>Select a Paragraph</li>
+                  <li className="flex justify-center rotate-180"><img src={arrowIcon} alt="icon" className="h-10 w-10" /></li>
+                  <li className={style.instruction}>Read</li>
+                  <li className="flex justify-center rotate-180"><img src={arrowIcon} alt="icon" className="h-10 w-10" /></li>
+                  <li className={style.instruction}>Hover to learn about unfamiliar words</li>
+                  <li className="flex justify-center rotate-180"><img src={arrowIcon} alt="icon" className="h-10 w-10" /></li>
+                  <li className={style.instruction}>Click to add to weak words</li>
+                  <li className="flex justify-center rotate-180"><img src={arrowIcon} alt="icon" className="h-10 w-10" /></li>
+                  <li className={style.instruction}>Generate quiz based on your weak words</li>
+                </ul>
+              </div>
+            </div>
+    </div>}
   </nav>
 }
 export default Navbar

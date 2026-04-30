@@ -1,4 +1,3 @@
-import arrowIcon from "../assets/arrow.svg"
 import { useState, useEffect, useRef } from 'react'
 import style from "./Paragraph.module.css"
 import { api } from "../api/axios.js"
@@ -43,46 +42,6 @@ export default function Paragraph() {
           </div>
         ))}
       </div>
-      {/* {currPara.length !== 0 && <div className={style.contentWrapper}> */}
-      {/*   <div className={style.content}> */}
-      {/*     {currPara.map((w, i) => ( */}
-      {/*       <span */}
-      {/*         className={hoveredWord === i ? style.hovered : ''} */}
-      {/*         onMouseEnter={() => { handleOnMouseEnter(w, i) }} */}
-      {/*         onMouseLeave={handleOnMouseLeave} */}
-      {/*       >{`${w} `} */}
-      {/*       </span> */}
-      {/*     ))} */}
-      {/*   </div> */}
-      {/* </div>} */}
-      {/* {currPara.length !== 0 ? <div className={style.contentWrapper}> */}
-      {/*   <div className={style.details}> */}
-      {/*     <h3 className="font-bold text-2xl p-1">{details.text}</h3> */}
-      {/*     <div> */}
-      {/*       {FIELDS.map(({ label, key }) => { */}
-      {/*         const val = get(details, key); */}
-      {/*         return ( */}
-      {/*           <> */}
-      {/*             <span key={`${key}-label`} className={style.label}>{label}:</span> */}
-      {/*             <span key={`${key}-value`} className={style.value}>{val || "-"}</span> */}
-      {/*           </> */}
-      {/*         ); */}
-      {/*       })} */}
-      {/*     </div> */}
-      {/*   </div> */}
-      {/* </div> : <div className="h-[90%] w-full"> */}
-      {/*   <div className="text-3xl items-center justify-center flex text-left font-sans h-full"> */}
-      {/*     <ul className={`${style.instructions} gap-5 flex flex-col`}> */}
-      {/*       <li className={style.instruction}>Select a Paragraph</li> */}
-      {/*       <li className="flex justify-center rotate-180"><img src={arrowIcon} alt="icon" className="h-10 w-10" /></li> */}
-      {/*       <li className={style.instruction}>Read</li> */}
-      {/*       <li className="flex justify-center rotate-180"><img src={arrowIcon} alt="icon" className="h-10 w-10" /></li> */}
-      {/*       <li className={style.instruction}>Hover to learn about unfamiliar words</li> */}
-      {/*       <li className="flex justify-center rotate-180"><img src={arrowIcon} alt="icon" className="h-10 w-10" /></li> */}
-      {/*       <li className={style.instruction}>Click to add to weak words</li> */}
-      {/*     </ul> */}
-      {/*   </div> */}
-      {/* </div>} */}
     </div>
   </>
 }
